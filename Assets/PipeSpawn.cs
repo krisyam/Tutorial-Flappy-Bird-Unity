@@ -5,9 +5,12 @@ using UnityEngine;
 public class PipeSpawn : MonoBehaviour
 {
     public GameObject pipe;
-    public float spawnRate = 2;
+    public float spawnRate = 2f;
     public float heightOffset = 10;
+    public int difficulty = 1;
+    private int difficultySpikeInterval = 0;
     private float timer = 0;
+    public float timePassed = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +20,7 @@ public class PipeSpawn : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        timePassed += Time.deltaTime;
         if (timer < spawnRate)
         {
             timer += Time.deltaTime;
@@ -26,7 +30,14 @@ public class PipeSpawn : MonoBehaviour
             spawnPipe();
             timer = 0;
         }
-        
+        if (spawnRate > 1)
+        {
+            if (timePassed > (8 / difficulty) * difficultySpikeInterval)
+            {
+                difficultySpikeInterval += 1;
+                spawnRate -= 0.1f;
+            }
+        }
     }
     void spawnPipe()
     {
